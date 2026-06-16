@@ -1,8 +1,11 @@
-from playwright.sync_api import sync_playwright, expect  # Импорт Playwright для синхронного режима и проверки
+from playwright.sync_api import sync_playwright
 
 with sync_playwright() as playwright:
     browser = playwright.chromium.launch(headless=False)
-    page = browser.new_page()
+    # Создаем новый контекст браузера (новая сессия, которая изолирована от других)
+    context = browser.new_context()
+    # Открываем новую страницу в рамках контекста
+    page = context.new_page()
 
     page.goto("https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/auth/registration")
 
@@ -18,6 +21,12 @@ with sync_playwright() as playwright:
     registration_button = page.get_by_test_id('registration-page-registration-button')
     registration_button.click()
 
-    dashboard_title = page.get_by_test_id('dashboard-toolbar-title-text')
-    expect(dashboard_title).to_be_visible()
-    expect(dashboard_title).to_have_text("Dashboard")
+    # Сохраняем состояние браузера (куки и localStorage) в файл для дальнейшего использования
+    context.storage_state(path='browser-state.json')
+
+with sync_playwright() as playwright:
+    browser = playwright.chromium.launch(headless=False)
+    context = browser.new_context(storage_state='browser-state.json')  # Указываем файл с сохраненным состоянием
+    page = context.new_page()
+
+    page.goto("https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/dashboard")
