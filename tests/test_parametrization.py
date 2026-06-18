@@ -36,7 +36,7 @@ def test_open_browser(browser: str):
 class TestOperations:
     # Параметр "user" передается в качестве аргумента в каждый тестовый метод класса
     @pytest.mark.parametrize("account", ["Credit card", "Debit card"])
-    def test_user_with_operations(self, user: str):
+    def test_user_with_operations(self, user: str, account: str):
         print(f"User with operations: {user}")
 
     # Аналогично тут передается "user"
