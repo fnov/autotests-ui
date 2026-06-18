@@ -1,5 +1,8 @@
 import pytest
 
+'''
+Маркировки нельзя применять к самам фикстурам.
+'''
 
 @pytest.mark.smoke
 @pytest.mark.regression
