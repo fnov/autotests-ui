@@ -1,11 +1,10 @@
 import pytest
 
 '''
-Маркировки нельзя применять к самам фикстурам.
+Маркировки нельзя применять к самим фикстурам.
 '''
 
 @pytest.mark.smoke
-@pytest.mark.regression
 class TestSuite:
 
     def test_smoke_case(self):
@@ -15,7 +14,6 @@ class TestSuite:
         pass
 
 
-@pytest.mark.regression
 class TestUserAuthentication:
 
     @pytest.mark.smoke
@@ -34,11 +32,10 @@ class TestUserAuthentication:
 class TestUserInterface:
 
     @pytest.mark.smoke
-    @pytest.mark.critical
     def test_login_button(self):
         pass
 
-    @pytest.mark.regression
+    @pytest.mark.critical
     def test_forgot_password_link(self):
         pass
 
