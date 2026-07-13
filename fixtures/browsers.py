@@ -1,15 +1,26 @@
+import allure
 import pytest
+from _pytest.fixtures import SubRequest
 from playwright.sync_api import Page, Playwright  # Имопртируем класс страницы для аннотации типов
 
 from pages.authentication.registration_page import RegistrationPage
 
 
 @pytest.fixture  # Объявляем фикстуру, по умолчанию скоуп function
-def chromium_page(playwright: Playwright) -> Page:
+def chromium_page(request: SubRequest, playwright: Playwright) -> Page:
     browser = playwright.chromium.launch(headless=False)
+    context = browser.new_context()
+    context.tracing.start(screenshots=True, snapshots=True, sources=True)  # Включаем трейсинг
+
     # Передаем страницу для использования в тесте
     yield browser.new_page()
+
+    # В данном случае request.node.name содержит название текущего автотеста
+    context.tracing.stop(path=f'./tracing/{request.node.name}.zip')  # Сохраняем трейсинг в файл
     browser.close()
+
+    # Прикрепляем файл с трейсингом к Allure отчету
+    allure.attach.file(f'./tracing/{request.node.name}.zip', name='trace', extension='zip')
 
 
 @pytest.fixture(scope="session")
@@ -28,8 +39,15 @@ def initialize_browser_state(playwright: Playwright) -> None:
 
 
 @pytest.fixture
-def chromium_page_with_state(initialize_browser_state, playwright: Playwright) -> Page:
+def chromium_page_with_state(initialize_browser_state, request: SubRequest, playwright: Playwright) -> Page:
     browser = playwright.chromium.launch(headless=False)
     context = browser.new_context(storage_state='browser-state.json')
+    context.tracing.start(screenshots=True, snapshots=True, sources=True)  # Включаем трейсинг
+
     yield context.new_page()
+
+    context.tracing.stop(path=f'./tracing/{request.node.name}.zip')  # Сохраняем трейсинг в файл
     browser.close()
+
+    # Прикрепляем файл с трейсингом к Allure отчету
+    allure.attach.file(f'./tracing/{request.node.name}.zip', name='trace', extension='zip')
