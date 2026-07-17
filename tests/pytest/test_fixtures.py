@@ -6,11 +6,6 @@ def send_analytics_data():
     print("[AUTOUSE] Отправляем данные в сервис аналитики")
 
 
-@pytest.fixture(scope="session")
-def settings():
-    print("[SESSION] Инициализация настроек автотестов")
-
-
 @pytest.fixture(scope="class")
 def user():
     print("[CLASS] Создание пользователя один раз на класс")
