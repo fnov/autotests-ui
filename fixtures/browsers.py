@@ -28,7 +28,7 @@ def initialize_browser_state(playwright: Playwright) -> None:
         password=settings.test_user.password)
     registration_page.click_registration_button()
 
-    context.storage_state(path=settings.browser_storage_path)
+    context.storage_state(path=settings.browser_state_file)
     browser.close()
 
 
