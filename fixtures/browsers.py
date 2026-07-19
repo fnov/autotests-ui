@@ -11,7 +11,7 @@ from tools.routes import AppRoute
 
 
 @pytest.fixture(params=settings.browsers)  # Объявляем фикстуру, по умолчанию скоуп function
-def chromium_page(request: SubRequest, playwright: Playwright) -> Generator[Page, Any, None]:
+def page(request: SubRequest, playwright: Playwright) -> Generator[Page, Any, None]:
     yield from initialize_playwright_page(
         playwright,
         test_name=request.node.name,
@@ -38,7 +38,7 @@ def initialize_browser_state(playwright: Playwright) -> None:
 
 
 @pytest.fixture(params=settings.browsers)
-def chromium_page_with_state(initialize_browser_state, request: SubRequest, playwright: Playwright) -> Generator[
+def page_with_state(initialize_browser_state, request: SubRequest, playwright: Playwright) -> Generator[
     Page, Any, None]:
     yield from initialize_playwright_page(
         playwright,
