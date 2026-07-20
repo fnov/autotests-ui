@@ -221,3 +221,6 @@ __marimo__/
 /allure-results/
 /tracing/
 /videos/
+
+*.html
+*.json
